@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Code-Seite</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    input, button {
+      padding: 8px;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Gib deinen Zahlencode ein</h1>
+    <input id="codeInput" type="number" placeholder="Zahlencode" />
+    <button id="checkButton">Prüfen</button>
+
+    <div id="result"></div>
+  </div>
+
+<script>
+  const codes = {
+    "48291": "Holt euch das Puzzleteil für Raum 1 bei Bettina oder Elias ab!",
+    "03756": "Holt euch das Puzzleteil für Raum 2 bei Bettina oder Elias ab!",
+"69124": "Holt euch das Puzzleteil für Raum 3 bei Bettina oder Elias ab!",
+"82507": "Holt euch das Puzzleteil für Raum 4 bei Bettina oder Elias ab!"
+  };
+
+    const input = document.getElementById("codeInput");
+    const button = document.getElementById("checkButton");
+    const result = document.getElementById("result");
+
+    function checkCode() {
+      const value = input.value.trim();
+
+      if (codes[value]) {
+        // Richtig: zeige das Wort an
+        result.textContent = codes[value];
+      } else {
+        // Falsch: nichts tun (optional: Anzeige leeren)
+        // result.textContent = "";
+      }
+    }
+
+    button.addEventListener("click", checkCode);
+
+    // Optional: Enter-Taste benutzen
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        checkCode();
+      }
+    });
+  </script>
+</body>
+</html>
