@@ -24,6 +24,7 @@
       background: radial-gradient(circle at top, #4a3d2b 0, #1b130e 40%, #050308 100%);
       color: #f5ecd7;
       font-family: "EB Garamond", serif;
+      transition: background 0.6s ease-out;
     }
 
     .scroll {
@@ -99,8 +100,7 @@
       gap: 10px;
     }
 
-    input[type="number"],
-    input[type="text"] {
+    input[type="number"] {
       flex: 1;
       padding: 10px 12px;
       font-size: 1rem;
@@ -129,7 +129,6 @@
       font-family: "Cinzel", serif;
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      white-space: nowrap;
       transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
       box-shadow: 0 3px 8px rgba(0,0,0,0.5);
     }
@@ -171,6 +170,42 @@
       text-align: center;
       opacity: 0.7;
     }
+
+    /* --- VERSTECKTER NICHT-DRÜCKEN-BUTTON --- */
+    .dont-press {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      font-size: 0.7rem;
+      padding: 6px 10px;
+      opacity: 0.35;
+      background: #6c4a24;
+      border: none;
+      color: #fdf5dd;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      font-family: "Cinzel", serif;
+    }
+
+    .dont-press:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+    }
+
+    #funMessage {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Cinzel", serif;
+      font-size: 1.3rem;
+      color: #e8d3a4;
+      text-shadow: 0 0 10px rgba(255, 170, 60, 0.8);
+      opacity: 0;
+      transition: opacity 0.4s ease-out;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -186,10 +221,16 @@
 
     <div id="result"></div>
     <p class="hint">Bei falschem Code bleibt die Schrift verborgen.</p>
+
+    <!-- Der versteckte Button -->
+    <button id="dontPressButton" class="dont-press">Nicht drücken!</button>
   </div>
 
+  <!-- Nachricht für das Easter Egg -->
+  <div id="funMessage"></div>
+
   <script>
-    // HIER DEINE CODES UND WÖRTER EINTRAGEN:
+    // ---- DEINE CODES ----
     const codes = {
       "48291": "Im Raum mit Säulen, hell und fein, da sortiert man Zahlen klein. Zwischen Kästen, still versteckt, wird das Lösungswort entdeckt.",
       "03756": "Dort, wo's grünt vor wichtiger Tür, wächst etwas still - und mittendrin auch ihr. Schaut dorthin, wo Blätter ruh'n, dort hat das Lösungswort zu tun.",
@@ -208,18 +249,32 @@
         result.textContent = codes[value];
         result.classList.add("visible");
       } else {
-        // falscher Code: nichts anzeigen
         result.textContent = "";
         result.classList.remove("visible");
       }
     }
 
     button.addEventListener("click", checkCode);
-
     input.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        checkCode();
-      }
+      if (event.key === "Enter") checkCode();
+    });
+
+    // ---- EASTER EGG ----
+    const dontPress = document.getElementById("dontPressButton");
+    const funMsg = document.getElementById("funMessage");
+
+    dontPress.addEventListener("click", () => {
+      funMsg.textContent = "Ich habe dich gewarnt...";
+      funMsg.style.opacity = 1;
+
+      // magischer Effekt
+      document.body.style.background = "radial-gradient(circle, #803c00 0%, #1b0b00 80%)";
+
+      setTimeout(() => {
+        funMsg.style.opacity = 0;
+        document.body.style.background =
+          "radial-gradient(circle at top, #4a3d2b 0, #1b130e 40%, #050308 100%)";
+      }, 2000);
     });
   </script>
 </body>
