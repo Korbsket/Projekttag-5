@@ -24,14 +24,15 @@
       background: radial-gradient(circle at top, #4a3d2b 0, #1b130e 40%, #050308 100%);
       color: #f5ecd7;
       font-family: "EB Garamond", serif;
-      transition: background 0.6s ease-out;
+      transition: background 0.4s ease-out;
+      overflow: hidden;
     }
 
     .scroll {
       position: relative;
       max-width: 420px;
       width: 100%;
-      padding: 32px 26px 40px;
+      padding: 32px 26px 52px;
       background: #f3e3c4;
       color: #2a1b11;
       border-radius: 12px;
@@ -67,7 +68,7 @@
     }
 
     .scroll::after {
-      bottom: -12px;
+      bottom: -18px;
     }
 
     h1 {
@@ -148,15 +149,12 @@
       margin-top: 24px;
       min-height: 32px;
       text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 1.1rem;
+      font-weight: 500;
       opacity: 0;
       transform: translateY(6px);
       transition: opacity 0.25s ease-out, transform 0.25s ease-out;
       color: #3c2412;
-      text-shadow: 0 0 12px rgba(178,118,46,0.6);
     }
 
     #result.visible {
@@ -171,14 +169,62 @@
       opacity: 0.7;
     }
 
+    /* --- RUNEN-LEISTE --- */
+    .runes {
+      margin-top: 22px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .rune {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid #7d5b2c;
+      background: radial-gradient(circle at 30% 20%, #fff6d4, #c99b5a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Cinzel", serif;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    }
+
+    .rune:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      filter: brightness(1.05);
+    }
+
+    .rune:active {
+      transform: translateY(1px) scale(0.97);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    }
+
+    #runeHint {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      text-align: center;
+      min-height: 16px;
+      opacity: 0;
+      transition: opacity 0.25s ease-out;
+    }
+
+    #runeHint.visible {
+      opacity: 0.85;
+    }
+
     /* --- VERSTECKTER NICHT-DRÜCKEN-BUTTON --- */
     .dont-press {
       position: absolute;
-      bottom: 12px;
-      right: 12px;
+      bottom: 10px;
+      right: 14px;
       font-size: 0.7rem;
-      padding: 6px 10px;
-      opacity: 0.35;
+      padding: 5px 9px;
+      opacity: 0.3;
       background: #6c4a24;
       border: none;
       color: #fdf5dd;
@@ -193,23 +239,110 @@
       transform: scale(1.05);
     }
 
-    #funMessage {
+    /* --- EASTER-EGG OVERLAY / CURSE --- */
+    #curseOverlay {
       position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.98) 60%);
+      color: #fce9b3;
       font-family: "Cinzel", serif;
-      font-size: 1.3rem;
-      color: #e8d3a4;
-      text-shadow: 0 0 10px rgba(255, 170, 60, 0.8);
+      text-align: center;
       opacity: 0;
-      transition: opacity 0.4s ease-out;
       pointer-events: none;
+      transition: opacity 0.35s ease-out;
+      z-index: 20;
+    }
+
+    #curseOverlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #curseOverlay h2 {
+      font-size: 2rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      text-shadow: 0 0 18px rgba(255,180,80,0.9);
+    }
+
+    #curseOverlay p {
+      max-width: 420px;
+      margin: 4px 0;
+      font-size: 0.95rem;
+    }
+
+    #curseCountdown {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    /* Bildschirm-Wackeln */
+    .shake {
+      animation: shake 0.35s ease-in-out 3;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-4px, 2px); }
+      40% { transform: translate(4px, -2px); }
+      60% { transform: translate(-3px, 3px); }
+      80% { transform: translate(3px, -3px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Funken-Partikel */
+    .spark {
+      position: fixed;
+      width: 4px;
+      height: 8px;
+      background: radial-gradient(circle, #ffe6a3 0%, #ff9f3b 40%, transparent 70%);
+      border-radius: 999px;
+      pointer-events: none;
+      opacity: 0;
+      animation: sparkUp 1s ease-out forwards;
+      z-index: 15;
+    }
+
+    @keyframes sparkUp {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.8);
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-120px) scale(0.5);
+      }
+    }
+
+    /* leicht pulsierender Hintergrund bei Fluch */
+    .curse-background {
+      animation: cursePulse 1.2s ease-in-out 3;
+    }
+
+    @keyframes cursePulse {
+      0% {
+        background: radial-gradient(circle at top, #4a3d2b 0, #1b130e 40%, #050308 100%);
+      }
+      50% {
+        background: radial-gradient(circle, #8b2a00 0%, #1b0500 60%, #050000 100%);
+      }
+      100% {
+        background: radial-gradient(circle at top, #4a3d2b 0, #1b130e 40%, #050308 100%);
+      }
     }
   </style>
 </head>
 <body>
-  <div class="scroll">
+  <div class="scroll" id="scrollBox">
     <h1>Geheime Worte</h1>
     <p class="subtitle">Gib den richtigen Zahlencode ein.</p>
 
@@ -222,12 +355,27 @@
     <div id="result"></div>
     <p class="hint">Bei falschem Code bleibt die Schrift verborgen.</p>
 
+    <!-- Rune-Leiste -->
+    <div class="runes">
+      <button class="rune" data-message="Manche Tore öffnen sich nur für jene, die zweimal hinschauen.">ᚠ</button>
+      <button class="rune" data-message="Nicht jeder Code ist aus Zahlen gemacht.">ᚢ</button>
+      <button class="rune" data-message="Die Antwort steht selten dort, wo alle zuerst suchen.">ᚦ</button>
+      <button class="rune" data-message="Die Stille des Raumes verrät mehr als sein Lärm.">ᚨ</button>
+      <button class="rune" data-message="Wer den Fluch kennt, weiß auch, wie man ihn bricht.">ᚱ</button>
+    </div>
+    <p id="runeHint"></p>
+
     <!-- Der versteckte Button -->
     <button id="dontPressButton" class="dont-press">Nicht drücken!</button>
   </div>
 
-  <!-- Nachricht für das Easter Egg -->
-  <div id="funMessage"></div>
+  <!-- Fluch-Overlay -->
+  <div id="curseOverlay">
+    <h2>Der Fluch ist entfesselt</h2>
+    <p>Alte Runen beginnen zu glühen, der Boden bebt und ein fernes Grollen erfüllt die Luft.</p>
+    <p>Vielleicht war das keine weise Entscheidung.</p>
+    <p id="curseCountdown"></p>
+  </div>
 
   <script>
     // ---- DEINE CODES ----
@@ -259,22 +407,84 @@
       if (event.key === "Enter") checkCode();
     });
 
-    // ---- EASTER EGG ----
+    // ---- RUNEN-LOGIK ----
+    const runes = document.querySelectorAll(".rune");
+    const runeHint = document.getElementById("runeHint");
+
+    runes.forEach((rune) => {
+      rune.addEventListener("click", () => {
+        const msg = rune.getAttribute("data-message");
+        runeHint.textContent = msg;
+        runeHint.classList.add("visible");
+
+        // kleine "Aufblitz"-Animation durch Entfernen/Neu-Hinzufügen der Klasse
+        runeHint.style.transition = "none";
+        runeHint.style.opacity = "0";
+        requestAnimationFrame(() => {
+          runeHint.style.transition = "opacity 0.25s ease-out";
+          runeHint.style.opacity = "0.85";
+        });
+      });
+    });
+
+    // ---- SPEKTAKULÄRES EASTER EGG ----
     const dontPress = document.getElementById("dontPressButton");
-    const funMsg = document.getElementById("funMessage");
+    const curseOverlay = document.getElementById("curseOverlay");
+    const curseCountdown = document.getElementById("curseCountdown");
+    const scrollBox = document.getElementById("scrollBox");
+
+    function spawnSparks() {
+      const sparkCount = 28;
+      for (let i = 0; i < sparkCount; i++) {
+        const spark = document.createElement("div");
+        spark.classList.add("spark");
+        const x = Math.random() * window.innerWidth;
+        const y = window.innerHeight - Math.random() * 160;
+        spark.style.left = x + "px";
+        spark.style.top = y + "px";
+        spark.style.animationDelay = (Math.random() * 0.4) + "s";
+        spark.style.transformOrigin = "center";
+
+        document.body.appendChild(spark);
+
+        setTimeout(() => {
+          spark.remove();
+        }, 1200);
+      }
+    }
 
     dontPress.addEventListener("click", () => {
-      funMsg.textContent = "Ich habe dich gewarnt...";
-      funMsg.style.opacity = 1;
+      // Overlay anzeigen
+      curseOverlay.classList.add("visible");
 
-      // magischer Effekt
-      document.body.style.background = "radial-gradient(circle, #803c00 0%, #1b0b00 80%)";
+      // Hintergrund pulsieren lassen
+      document.body.classList.add("curse-background");
 
-      setTimeout(() => {
-        funMsg.style.opacity = 0;
-        document.body.style.background =
-          "radial-gradient(circle at top, #4a3d2b 0, #1b130e 40%, #050308 100%)";
-      }, 2000);
+      // Scroll wackeln lassen
+      scrollBox.classList.add("shake");
+
+      // Funken erzeugen
+      spawnSparks();
+
+      // Countdown
+      let seconds = 3;
+      curseCountdown.textContent = "Der Fluch löst sich in " + seconds + "…";
+
+      const interval = setInterval(() => {
+        seconds--;
+        if (seconds > 0) {
+          curseCountdown.textContent = "Der Fluch löst sich in " + seconds + "…";
+        } else {
+          clearInterval(interval);
+          curseCountdown.textContent = "Der Fluch verflüchtigt sich…";
+          // alles wieder zurückfahren
+          setTimeout(() => {
+            curseOverlay.classList.remove("visible");
+            document.body.classList.remove("curse-background");
+            scrollBox.classList.remove("shake");
+          }, 600);
+        }
+      }, 1000);
     });
   </script>
 </body>
