@@ -2,43 +2,200 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Code-Seite</title>
+  <title>Geheime Runen</title>
+
+  <!-- Magische, alte Fonts von Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: system-ui, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
+
+      /* dunkler, mystischer Hintergrund */
+      background: radial-gradient(circle at top, #4a3d2b 0, #1b130e 40%, #050308 100%);
+      color: #f5ecd7;
+      font-family: "EB Garamond", serif;
     }
-    .container {
-      max-width: 400px;
-      margin: 0 auto;
+
+    .scroll {
+      position: relative;
+      max-width: 420px;
+      width: 100%;
+      padding: 32px 26px 40px;
+      background: #f3e3c4;
+      color: #2a1b11;
+      border-radius: 12px;
+      box-shadow:
+        0 0 40px rgba(0,0,0,0.7),
+        inset 0 0 20px rgba(0,0,0,0.25);
+      background-image:
+        radial-gradient(circle at top left, rgba(255,255,255,0.4), transparent 60%),
+        radial-gradient(circle at bottom right, rgba(150,110,60,0.5), transparent 60%),
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,0,0,0.05),
+          rgba(0,0,0,0.05) 1px,
+          transparent 1px,
+          transparent 3px
+        );
     }
-    #result {
-      margin-top: 20px;
-      font-size: 1.5rem;
-      font-weight: bold;
+
+    .scroll::before,
+    .scroll::after {
+      content: "";
+      position: absolute;
+      left: -18px;
+      right: -18px;
+      height: 18px;
+      background: #b38758;
+      border-radius: 999px;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
     }
-    input, button {
-      padding: 8px;
+
+    .scroll::before {
+      top: -12px;
+    }
+
+    .scroll::after {
+      bottom: -12px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-family: "Cinzel", serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 1.4rem;
+      text-align: center;
+    }
+
+    .subtitle {
+      margin-bottom: 24px;
+      text-align: center;
+      font-size: 0.95rem;
+      opacity: 0.8;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-family: "Cinzel", serif;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 12px;
       font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #9b7b4c;
+      background: #fdf5dd;
+      font-family: "EB Garamond", serif;
+      outline: none;
+      transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #c49a5a;
+      box-shadow: 0 0 0 2px rgba(196,154,90,0.4);
+      background: #fff9e4;
+    }
+
+    button {
+      padding: 10px 16px;
+      font-size: 0.95rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #6c4a24, #b88a44);
+      color: #fdf5dd;
+      font-family: "Cinzel", serif;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: transform 0.1s, box-shadow 0.1s, filter 0.1s;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+    }
+
+    button:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.6);
+    }
+
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.7);
+    }
+
+    #result {
+      margin-top: 24px;
+      min-height: 32px;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+      color: #3c2412;
+      text-shadow: 0 0 12px rgba(178,118,46,0.6);
+    }
+
+    #result.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      text-align: center;
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Gib deinen Zahlencode ein</h1>
-    <input id="codeInput" type="number" placeholder="Zahlencode" />
-    <button id="checkButton">Prüfen</button>
+  <div class="scroll">
+    <h1>Geheime Worte</h1>
+    <p class="subtitle">Gib den richtigen Zahlencode ein.</p>
+
+    <label for="codeInput">Zahlencode</label>
+    <div class="input-row">
+      <input id="codeInput" type="number" placeholder="z.B. 1234" />
+      <button id="checkButton">Entsiegeln</button>
+    </div>
 
     <div id="result"></div>
+    <p class="hint">Bei falschem Code bleibt die Schrift verborgen.</p>
   </div>
 
-<script>
-  const codes = {
-    "48291": "Im Raum mit Säulen, hell und fein, da sortiert man Zahlen klein. Zwischen Kästen, still versteckt, wird das Lösungswort entdeckt.",
-    "03756": "Dort, wo’s grünt vor wichtiger Tür, wächst etwas still – und mittendrin auch ihr. Schaut dorthin, wo Blätter ruh’n, dort hat das Lösungswort zu tun.",
-"69124": "Am Fenster, wo Eulen wachen und die grünen Zweige lachen, schaut genau und tretet näher – dort liegt ein Lösungswort, gar nicht schwerer.",
-"82507": "Ganz oben, wo die Stufen enden und stille Räume sich nach oben wenden, liegt etwas rot und stark bereit – das Lösungswort ist nicht mehr weit."
-  };
+  <script>
+    // HIER DEINE CODES UND WÖRTER EINTRAGEN:
+    const codes = {
+      "48291": "Im Raum mit Säulen, hell und fein, da sortiert man Zahlen klein. Zwischen Kästen, still versteckt, wird das Lösungswort entdeckt.",
+      "03756": "Dort, wo's grünt vor wichtiger Tür, wächst etwas still - und mittendrin auch ihr. Schaut dorthin, wo Blätter ruh'n, dort hat das Lösungswort zu tun.",
+      "69124": "Am Fenster, wo Eulen wachen und die grünen Zweige lachen, schaut genau und tretet näher - dort liegt ein Lösungswort, gar nicht schwerer.",
+      "82507": "Ganz oben, wo die Stufen enden und stille Räume sich nach oben wenden, liegt etwas rot und stark bereit - das Lösungswort ist nicht mehr weit."
+    };
 
     const input = document.getElementById("codeInput");
     const button = document.getElementById("checkButton");
@@ -48,17 +205,17 @@
       const value = input.value.trim();
 
       if (codes[value]) {
-        // Richtig: zeige das Wort an
         result.textContent = codes[value];
+        result.classList.add("visible");
       } else {
-        // Falsch: nichts tun (optional: Anzeige leeren)
-        // result.textContent = "";
+        // falscher Code: nichts anzeigen
+        result.textContent = "";
+        result.classList.remove("visible");
       }
     }
 
     button.addEventListener("click", checkCode);
 
-    // Optional: Enter-Taste benutzen
     input.addEventListener("keydown", (event) => {
       if (event.key === "Enter") {
         checkCode();
