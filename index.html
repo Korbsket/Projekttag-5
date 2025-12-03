@@ -297,6 +297,30 @@
         0 0 18px rgba(200,150,80,0.4);
     }
 
+    /* Glow-Effekt vor dem Anzeigen des Textes */
+    #result.glow {
+      animation: resultGlow 0.4s ease-out;
+    }
+
+    @keyframes resultGlow {
+      0% {
+        box-shadow:
+          inset 0 0 6px rgba(0,0,0,0.12),
+          0 0 0 rgba(255,220,160,0);
+      }
+      40% {
+        box-shadow:
+          inset 0 0 10px rgba(0,0,0,0.15),
+          0 0 30px rgba(255,220,160,0.95),
+          0 0 50px rgba(200,140,80,0.9);
+      }
+      100% {
+        box-shadow:
+          inset 0 0 8px rgba(0,0,0,0.08),
+          0 0 18px rgba(200,150,80,0.4);
+      }
+    }
+
     #result.visible {
       opacity: 1;
       transform: translateY(0);
@@ -387,28 +411,29 @@
       transform: translateY(0);
     }
 
-    /* EXTREM UNSCHEINBARER "NICHT DRÜCKEN"-BUTTON */
+    /* BESSER SICHTBARER, ABER NOCH VERSTECKTER "NICHT DRÜCKEN"-BUTTON */
     .dont-press {
       position: absolute;
-      bottom: 4px;
-      right: 10px;
-      font-size: 0.5rem;
-      padding: 1px 4px;
-      opacity: 0.05;
-      background: rgba(150, 120, 80, 0.28);
-      border: 1px solid rgba(120, 90, 55, 0.25);
-      color: rgba(60, 40, 20, 0.7);
-      border-radius: 4px;
+      bottom: 6px;
+      right: 12px;
+      font-size: 0.6rem;
+      padding: 2px 6px;
+      opacity: 0.22;
+      background: rgba(150, 120, 80, 0.5);
+      border: 1px solid rgba(120, 90, 55, 0.55);
+      color: rgba(55, 35, 18, 0.9);
+      border-radius: 5px;
       cursor: pointer;
       box-shadow: none;
       font-family: "Cinzel", serif;
       text-transform: none;
-      letter-spacing: 0.03em;
-      transition: opacity 0.25s;
+      letter-spacing: 0.04em;
+      transition: opacity 0.25s, transform 0.1s;
     }
 
     .dont-press:hover {
-      opacity: 0.2;
+      opacity: 0.6;
+      transform: translateY(-1px);
     }
 
     /* Easter Egg Nachricht */
@@ -502,7 +527,7 @@
           <p id="runeHint"></p>
         </div>
 
-        <!-- Extrem unscheinbarer Button -->
+        <!-- Versteckter Button -->
         <button id="dontPressButton" class="dont-press">Nicht drücken!</button>
       </div>
     </div>
@@ -526,12 +551,27 @@
     function checkCode() {
       const value = input.value.trim();
 
+      // Reset vorherigen Zustand
+      result.classList.remove("visible", "glow");
+
       if (codes[value]) {
-        result.textContent = codes[value];
-        result.classList.add("visible");
+        // Text zunächst leeren
+        result.textContent = "";
+
+        // Reflow erzwingen, damit die Animation neu gestartet werden kann
+        void result.offsetWidth;
+
+        // Glow aktivieren
+        result.classList.add("glow");
+
+        // Nach kurzer Zeit Text einblenden
+        setTimeout(() => {
+          result.textContent = codes[value];
+          result.classList.add("visible");
+          result.classList.remove("glow");
+        }, 400); // passend zur CSS-Animation
       } else {
         result.textContent = "";
-        result.classList.remove("visible");
       }
     }
 
